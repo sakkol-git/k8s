@@ -1,0 +1,46 @@
+# The version of the Kubernetes API to use (apps/v1 is standard for Deployments)
+apiVersion: apps/v1
+# What kind of resource we are creating (Deployment manages running copies of your app)
+kind: Deployment
+# Information that uniquely identifies this resource
+metadata:
+  # The name of this Deployment
+  name: tax-service-a
+  # Tags used to identify and group resources together
+  labels:
+    # A custom tag naming our app 'web-app'
+    app: tax-service-a
+# The desired state or configuration for this Deployment
+spec:
+  # How many identical copies (pods) of the app should run at the same time
+  replicas: 1
+  # How the Deployment finds which pods it is supposed to manage
+  selector:
+    # It looks for pods that have these exact labels
+    matchLabels:
+      # Must match the label defined in the template below
+      app: tax-service-a
+  # The blueprint used to create new pods
+  template:
+    # Information attached to every pod created from this blueprint
+    metadata:
+      # Tags given to every pod (must match the selector above)
+      labels:
+        app: tax-service-a
+    # The actual configuration for the containers running inside the pod
+    spec:
+      # A list of containers to run in this pod
+      containers:
+        # The name we give to this specific container
+        - name: tax-service-a
+          # The exact Docker image and version to run (Nginx web server version 1.25)
+          image: embarkx/tax-service-a:latest
+          # Environment variables passed to the container
+          env:
+            # Sourcing the custom environment variable from a ConfigMap
+            - name: TAX_SERVICE_URL
+              value: "http://tax-service-b:4000"
+          # Ports that this container exposes
+          ports:
+            # The network port that the container listens on inside the pod
+            - containerPort: 3000

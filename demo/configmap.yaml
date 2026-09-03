@@ -1,0 +1,10 @@
+# The version of the Kubernetes API to use
+apiVersion: v1
+# What kind of resource we are creating (ConfigMap stores non-confidential data)
+kind: ConfigMap
+metadata:
+  # The name of this ConfigMap
+  name: web-app-config
+data:
+  # The actual data we want to store
+  APP_MESSAGE: "Hello from k8s via ConfigMap!"

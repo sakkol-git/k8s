@@ -1,0 +1,29 @@
+# The version of the Kubernetes API to use (v1 is standard for Services)
+apiVersion: v1
+# What kind of resource we are creating (Service provides network access to your app)
+kind: Service
+# Information that uniquely identifies this Service
+metadata:
+  # The name of this Service
+  name: hello-node
+  # Tags used to identify this Service
+  labels:
+    app: hello-node
+# The network configuration for this Service
+spec:
+  # Exposes the Service on each Node's IP at a static port (makes it accessible outside the cluster)
+  type: NodePort
+  # How the Service knows which pods to send traffic to
+  selector:
+    # It will route traffic to any pod with this label
+    app: hello-node
+  # A list of network ports this Service will manage
+  ports:
+    # The port this Service is exposed on inside the cluster
+    - port: 3000
+      # The port the container is actually listening on
+      targetPort: 3000
+      # The exact port opened on the host machines to access the app from the outside
+      nodePort: 32000
+      # The network protocol to use (TCP is standard for web traffic)
+      protocol: TCP

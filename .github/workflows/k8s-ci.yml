@@ -1,0 +1,32 @@
+name: Kubernetes CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  validate:
+    name: Validate Kubernetes Manifests
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Install kubectl CLI tool on the runner
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'latest'
+
+      # Step 3: Validate Kubernetes manifests using client-side dry run
+      - name: Validate Kubernetes Manifests (Dry Run)
+        run: |
+          echo "Validating Kubernetes manifests..."
+          for dir in */; do
+            echo "Checking $dir"
+            kubectl apply --dry-run=client -R -f "$dir"
+          done
