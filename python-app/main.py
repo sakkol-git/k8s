@@ -1,10 +1,11 @@
-def add(a, b):
-    return a + b
+from flask import Flask, jsonify
 
-def subtract(a, b):
-    return a - b
+app = Flask(__name__)
 
-if __name__ == "__main__":
-    print("Welcome to the simple Python CI/CD demo!")
-    print(f"2 + 3 = {add(2, 3)}")
-    print(f"5 - 2 = {subtract(5, 2)}")
+@app.route('/')
+def hello():
+    return jsonify(message="Hello from Flask!")
+
+if __name__ == '__main__':
+    # Run the app, listening on all interfaces (0.0.0.0)
+    app.run(host='0.0.0.0', port=5000)
