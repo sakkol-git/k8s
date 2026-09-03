@@ -1,15 +1,23 @@
 import unittest
-from main import add, subtract
+import json
+from main import app
 
-class TestMain(unittest.TestCase):
-    def test_add(self):
-        self.assertEqual(add(2, 3), 5)
-        self.assertEqual(add(-1, 1), 0)
-        self.assertEqual(add(-1, -1), -2)
+class FlaskAppTestCase(unittest.TestCase):
+    def setUp(self):
+        # Create a test client
+        self.app = app.test_client()
+        self.app.testing = True 
 
-    def test_subtract(self):
-        self.assertEqual(subtract(5, 2), 3)
-        self.assertEqual(subtract(1, 1), 0)
+    def test_hello_endpoint(self):
+        # Send a GET request to the root '/'
+        response = self.app.get('/')
+        
+        # Check the status code
+        self.assertEqual(response.status_code, 200)
+        
+        # Check the response data
+        data = json.loads(response.data)
+        self.assertEqual(data['message'], "Hello from Flask!")
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
