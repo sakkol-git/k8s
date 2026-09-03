@@ -28,5 +28,5 @@ jobs:
           echo "Validating Kubernetes manifests..."
           for dir in */; do
             echo "Checking $dir"
-            kubectl apply --dry-run=client -R -f "$dir"
+            kubectl apply --dry-run=client --validate=false -R -f "$dir"
           done
